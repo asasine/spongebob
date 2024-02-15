@@ -10,9 +10,9 @@ struct Cli {
     #[arg(id = "WORD", required = true)]
     words: Vec<String>,
 
-    /// Randomize the case of each letter, rather than alternating.
+    /// Alternate the case of each letter, rather than randomizing.
     #[arg(short, long)]
-    random: bool,
+    alternate: bool,
 
     /// Copy the modified text to the clipboard.
     #[arg(short, long, default_value = "false")]
@@ -22,13 +22,11 @@ struct Cli {
 
 fn main() {
     let args = Cli::parse();
-
-    // alternate each letter's case of each word, skipping non-alphabetic characters
     let text = args.words.join(" ");
-    let output = if args.random {
-        spongebob::randomize(&text)
-    } else {
+    let output = if args.alternate {
         spongebob::alternate(&text)
+    } else {
+        spongebob::randomize(&text)
     };
 
     println!("{}", output);
