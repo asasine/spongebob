@@ -78,7 +78,7 @@ mod tests {
         }
 
         #[test]
-        fn altenate_no_alphabetic() {
+        fn alternate_no_alphabetic() {
             assert_eq!(alternate("123"), "123");
             assert_eq!(alternate(" "), " ");
             assert_eq!(alternate("\t"), "\t");
