@@ -1,0 +1,19 @@
+[package]
+name = "spongebob"
+version = "1.0.0"
+authors = ["Adam Sasine <adam.sasine@gmail.com>"]
+edition = "2021"
+description = "A command to convert text to the Spongebob meme case."
+homepage = "https://github.com/asasine/spongebob"
+repository = "https://github.com/asasine/spongebob"
+license = "MIT"
+categories = ["command-line-utilities", "text-processing"]
+
+[dependencies]
+arboard = "3.3.1"
+clap = { version = "4.5.0", features = ["derive", "unicode"] }
+rand = "0.8.5"
+
+[dev-dependencies]
+assert_cmd = "2.0.13"
+predicates = "3.1.0"
