@@ -10,3 +10,7 @@ edition = "2021"
 arboard = "3.3.1"
 clap = { version = "4.5.0", features = ["derive", "unicode"] }
 rand = "0.8.5"
+
+[dev-dependencies]
+assert_cmd = "2.0.13"
+predicates = "3.1.0"
