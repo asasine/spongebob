@@ -1,6 +1,7 @@
 [package]
 name = "spongebob"
 description = "A command to convert text to the Spongebob meme case."
+license = "MIT"
 version = "1.0.0"
 edition = "2021"
 
