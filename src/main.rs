@@ -32,7 +32,10 @@ fn main() {
 
     if !args.no_copy {
         let mut clipboard = Clipboard::new().expect("Failed to access clipboard");
-        clipboard.set_text(output).expect("Failed to copy to clipboard.");
+        clipboard
+            .set_text(output)
+            .expect("Failed to copy to clipboard.");
+
         println!("Copied to clipboard.");
     }
 }
@@ -112,6 +115,9 @@ mod tests {
             .assert()
             .success();
 
-        assert!(clipboard.get_text().is_err(), "Clipboard should still be empty");
+        assert!(
+            clipboard.get_text().is_err(),
+            "Clipboard should still be empty"
+        );
     }
 }
