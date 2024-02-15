@@ -5,7 +5,7 @@ Cross-platform clipboard support for Windows, macOS, and Linux included.
 
 [![Crates.io Version](https://img.shields.io/crates/v/spongebob?logo=rust)](https://crates.io/crates/spongebob)
 [![Crates.io Documentation](https://docs.rs/spongebob/badge.svg)](https://docs.rs/spongebob)
-![CI](https://img.shields.io/github/actions/workflow/status/asasine/spongebob/rust?branch=main)
+![CI](https://img.shields.io/github/actions/workflow/status/asasine/spongebob/rust.yaml?branch=main)
 [![Crates.io Downloads](https://img.shields.io/crates/d/spongebob)](https://crates.io/crates/spongebob)
 
 
