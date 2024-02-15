@@ -1,4 +1,4 @@
-// use arboard::Clipboard;
+use arboard::Clipboard;
 use clap::Parser;
 
 #[derive(Parser)]
@@ -13,6 +13,10 @@ struct Cli {
     /// Randomize the case of each letter, rather than alternating.
     #[arg(short, long)]
     random: bool,
+
+    /// Copy the modified text to the clipboard.
+    #[arg(short, long)]
+    copy: bool,
 }
 
 
@@ -29,6 +33,8 @@ fn main() {
 
     println!("{}", output);
 
-    // let mut clipboard = Clipboard::new().unwrap();
-    // clipboard.set_text(args.words.join(" ")).unwrap();
+    if args.copy {
+        let mut clipboard = Clipboard::new().expect("Failed to access clipboard");
+        clipboard.set_text(output).unwrap();
+    }
 }
