@@ -15,8 +15,8 @@ struct Cli {
     random: bool,
 
     /// Copy the modified text to the clipboard.
-    #[arg(short, long)]
-    copy: bool,
+    #[arg(short, long, default_value = "false")]
+    no_copy: bool,
 }
 
 
@@ -33,7 +33,7 @@ fn main() {
 
     println!("{}", output);
 
-    if args.copy {
+    if !args.no_copy {
         let mut clipboard = Clipboard::new().expect("Failed to access clipboard");
         clipboard.set_text(output).unwrap();
     }
