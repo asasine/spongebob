@@ -20,6 +20,7 @@ struct Cli {
 }
 
 fn main() {
+    human_panic::setup_panic!();
     let args = Cli::parse();
     let text = args.words.join(" ");
     let output = if args.alternate {
