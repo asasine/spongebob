@@ -32,12 +32,23 @@ fn main() {
     println!("{}", output);
 
     if !args.no_copy {
-        let mut clipboard = Clipboard::new().expect("Failed to access clipboard");
-        clipboard
-            .set_text(output)
-            .expect("Failed to copy to clipboard.");
+        match Clipboard::new() {
+            Ok(mut clipboard) => {
+                clipboard
+                    .set_text(output)
+                    .expect("Failed to copy to clipboard.");
+                println!("Copied to clipboard.");
+            }
+            Err(e) => {
+                if cfg!(target_os = "linux") {
+                    let yellow = anstyle::AnsiColor::Yellow.on_default();
+                    eprintln!("\n{yellow}Looks like you're experiencing https://github.com/asasine/spongebob/issues/8. Clipboard support on Linux is currently unreliable. In the meantime, try piping to wl-copy from the wl-clipboard package or copying from your terminal above.{yellow:#}");
+                    eprintln!("\nIf you can, please add a 👍 or comment to https://github.com/asasine/spongebob/issues/8 so I can prioritize fixing this.\n");
+                }
 
-        println!("Copied to clipboard.");
+                panic!("Failed to access clipboard: {}", e)
+            }
+        }
     }
 }
 
