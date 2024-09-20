@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0](https://github.com/asasine/spongebob/compare/v1.1.1...v1.2.0) - 2024-09-20
+
+### Added
+
+- Added new g o o d b o y e binary
+
 ## [1.1.1](https://github.com/asasine/spongebob/compare/v1.1.0...v1.1.1) - 2024-05-23
 
 ### Fixed
