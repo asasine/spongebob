@@ -65,6 +65,17 @@ pub fn randomize(text: &str) -> String {
         .collect()
 }
 
+/// Inserts spaces between character of the input.
+///
+/// # Examples
+/// ```
+/// use spongebob::spaceify;
+/// assert_eq!(spaceify("Hello, world!"), "H e l l o ,   w o r l d ! ");
+/// ```
+pub fn spaceify(text: &str) -> String {
+    text.chars().map(|c| format!("{} ", c)).collect()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -150,6 +161,40 @@ mod tests {
             assert_eq!(randomize("A A A").to_lowercase(), "a a a");
             assert_eq!(randomize("a aa aaa aaaa").to_lowercase(), "a aa aaa aaaa");
             assert_eq!(randomize("A aa aaa aaaa").to_lowercase(), "a aa aaa aaaa");
+        }
+    }
+
+    mod spaceify {
+        use super::*;
+
+        #[test]
+        fn empty() {
+            assert_eq!(spaceify(""), "");
+        }
+
+        #[test]
+        fn single_word() {
+            assert_eq!(spaceify("a"), "a ");
+            assert_eq!(spaceify("aa"), "a a ");
+            assert_eq!(spaceify("aaa"), "a a a ");
+        }
+
+        #[test]
+        fn multiple_words() {
+            assert_eq!(spaceify("a a"), "a   a ");
+            assert_eq!(spaceify("a aa"), "a   a a ");
+            assert_eq!(spaceify("a aaa"), "a   a a a ");
+            assert_eq!(spaceify("a a a"), "a   a   a ");
+            assert_eq!(spaceify("a aa a"), "a   a a   a ");
+            assert_eq!(spaceify("a aa aa"), "a   a a   a a ");
+        }
+
+        #[test]
+        fn non_alphabetic() {
+            assert_eq!(spaceify("123"), "1 2 3 ");
+            assert_eq!(spaceify(" "), "  ");
+            assert_eq!(spaceify("\t"), "\t ");
+            assert_eq!(spaceify(" \t \r\n"), "  \t   \r \n ");
         }
     }
 }
