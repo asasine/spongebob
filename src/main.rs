@@ -37,7 +37,8 @@ fn main() {
                 clipboard
                     .set_text(output)
                     .expect("Failed to copy to clipboard.");
-                println!("Copied to clipboard.");
+
+                eprintln!("Copied to clipboard.");
             }
             Err(e) => {
                 if cfg!(target_os = "linux") {
