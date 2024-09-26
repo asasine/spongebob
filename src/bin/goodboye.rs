@@ -69,7 +69,7 @@ mod tests {
             .arg("Hello,    world!") // multiple spaces to test that they are preserved
             .assert()
             .success()
-            .stdout(predicates::str::contains("H e l l o ,         w o r l d ! "));
+            .stdout(predicates::str::contains("H e l l o ,     w o r l d ! "));
     }
 
     #[test]
@@ -81,7 +81,7 @@ mod tests {
             .arg("world!")
             .assert()
             .success()
-            .stdout(predicates::str::contains("H e l l o ,   w o r l d ! "));
+            .stdout(predicates::str::contains("H e l l o ,  w o r l d ! "));
     }
 
     #[ignore = "Clipboard access is not reliable in CI"]

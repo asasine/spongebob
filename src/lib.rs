@@ -67,13 +67,19 @@ pub fn randomize(text: &str) -> String {
 
 /// Inserts spaces between character of the input.
 ///
+/// Whitespace characters are passed through without modification. This effectively results in two spaces between words.
+///
 /// # Examples
 /// ```
 /// use spongebob::spaceify;
-/// assert_eq!(spaceify("Hello, world!"), "H e l l o ,   w o r l d ! ");
+/// assert_eq!(spaceify("Hello, world!"), "H e l l o ,  w o r l d ! ");
 /// ```
 pub fn spaceify(text: &str) -> String {
-    text.chars().map(|c| format!("{} ", c)).collect()
+    text.chars().map(|c| if !c.is_whitespace() {
+        format!("{} ", c)
+    } else {
+        c.to_string()
+    }).collect()
 }
 
 #[cfg(test)]
@@ -181,20 +187,20 @@ mod tests {
 
         #[test]
         fn multiple_words() {
-            assert_eq!(spaceify("a a"), "a   a ");
-            assert_eq!(spaceify("a aa"), "a   a a ");
-            assert_eq!(spaceify("a aaa"), "a   a a a ");
-            assert_eq!(spaceify("a a a"), "a   a   a ");
-            assert_eq!(spaceify("a aa a"), "a   a a   a ");
-            assert_eq!(spaceify("a aa aa"), "a   a a   a a ");
+            assert_eq!(spaceify("a a"), "a  a ");
+            assert_eq!(spaceify("a aa"), "a  a a ");
+            assert_eq!(spaceify("a aaa"), "a  a a a ");
+            assert_eq!(spaceify("a a a"), "a  a  a ");
+            assert_eq!(spaceify("a aa a"), "a  a a  a ");
+            assert_eq!(spaceify("a aa aa"), "a  a a  a a ");
         }
 
         #[test]
         fn non_alphabetic() {
             assert_eq!(spaceify("123"), "1 2 3 ");
-            assert_eq!(spaceify(" "), "  ");
-            assert_eq!(spaceify("\t"), "\t ");
-            assert_eq!(spaceify(" \t \r\n"), "  \t   \r \n ");
+            assert_eq!(spaceify(" "), " ");
+            assert_eq!(spaceify("\t"), "\t");
+            assert_eq!(spaceify(" \t \r\n"), " \t \r\n");
         }
     }
 }
