@@ -7,7 +7,7 @@ struct Cli {
     /// The space-separated words to modify.
     ///
     /// At least one word is required.
-    #[arg(id = "WORD", required = true)]
+    #[arg(id = "WORD", required = false)]
     words: Vec<String>,
 
     /// Alternate the case of each letter, rather than randomizing.
