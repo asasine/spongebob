@@ -1,3 +1,5 @@
+use std::io::Read;
+
 use arboard::Clipboard;
 use clap::Parser;
 
@@ -22,7 +24,16 @@ struct Cli {
 fn main() {
     human_panic::setup_panic!();
     let args = Cli::parse();
-    let text = args.words.join(" ");
+
+    let text: String = if !args.words.is_empty() {
+        args.words.join(" ")
+    } else {
+        let mut buf = String::new();
+        let mut stdin = std::io::stdin();
+        let _textlen = stdin.read_to_string(&mut buf);
+        buf
+    };
+
     let output = if args.alternate {
         spongebob::alternate(&text)
     } else {
