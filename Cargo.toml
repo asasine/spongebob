@@ -1,7 +1,10 @@
 [package]
 name = "spongebob"
 version = "1.2.1"
-authors = ["Adam Sasine <adam.sasine@gmail.com>"]
+authors = [
+	"Adam Sasine <adam.sasine@gmail.com>",
+	"Christoph J. Scherr <software@cscherr.de>",
+]
 edition = "2021"
 description = "A utility to convert text to spongebob case a.k.a tHe MoCkInG sPoNgEbOb MeMe."
 homepage = "https://github.com/asasine/spongebob"
