@@ -8,7 +8,8 @@ use clap::Parser;
 struct Cli {
     /// The space-separated words to modify.
     ///
-    /// At least one word is required.
+    /// If no words were provided, the words may be given from stdin. Input from stdin can be
+    /// explicity requested by passing "-" as the first and only word.
     #[arg(id = "WORD", required = false)]
     words: Vec<String>,
 
