@@ -25,7 +25,10 @@ fn main() {
     human_panic::setup_panic!();
     let args = Cli::parse();
 
-    let text: String = if !args.words.is_empty() {
+    // using "-" as an argument for a file usually signals that the user wants the input to be read
+    // from the stdin. If no words were given, we can just assume input from stdin.
+    let text: String = if !args.words.is_empty() || (args.words[0] == "-" && args.words.len() == 1)
+    {
         args.words.join(" ")
     } else {
         let mut buf = String::new();
