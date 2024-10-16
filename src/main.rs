@@ -22,29 +22,45 @@ struct Cli {
     no_copy: bool,
 }
 
-fn main() {
+fn main() -> anyhow::Result<()> {
     human_panic::setup_panic!();
     let args = Cli::parse();
 
     // using "-" as an argument for a file usually signals that the user wants the input to be read
     // from the stdin. If no words were given, we can just assume input from stdin.
-    let text: String = if !(args.words.is_empty() || args.words.len() == 1 && args.words[0] == "-")
-    {
-        args.words.join(" ")
-    } else {
-        let mut buf = String::new();
+    let use_stdin = args.words.is_empty() || (args.words.len() == 1 && args.words[0] == "-");
+    let mut output: String;
+
+    if use_stdin {
         let mut stdin = std::io::stdin();
-        let _textlen = stdin.read_to_string(&mut buf);
-        buf
-    };
-
-    let output = if args.alternate {
-        spongebob::alternate(&text)
+        let mut buf = [0; 64];
+        let mut repr: String;
+        let mut stream: String;
+        output = String::new();
+        loop {
+            let len = stdin.read(&mut buf)?;
+            if len == 0 {
+                break; // end of file reached
+            }
+            repr = std::str::from_utf8(&buf[0..len])?.to_string();
+            stream = if args.alternate {
+                spongebob::alternate(&repr)
+            } else {
+                spongebob::randomize(&repr)
+            };
+            print!("{}", stream);
+            output += &stream;
+            stream.clear();
+        }
     } else {
-        spongebob::randomize(&text)
-    };
-
-    println!("{}", output);
+        let words = args.words.join(" ");
+        output = if args.alternate {
+            spongebob::alternate(&words)
+        } else {
+            spongebob::randomize(&words)
+        };
+        println!("{}", output);
+    }
 
     if !args.no_copy {
         match Clipboard::new() {
@@ -66,6 +82,7 @@ fn main() {
             }
         }
     }
+    Ok(())
 }
 
 #[cfg(test)]
@@ -85,11 +102,11 @@ mod tests {
     const LONG_TEST_TEXT_SPONGEBOB: &str = r"
     LoReM iPsUm DoLoR sIt AmEt, CoNsEcTeTuR aDiPiScInG eLiT, sEd Do
     EiUsMoD tEmPoR iNcIdIdUnT uT lAbOrE eT dOlOrE mAgNa AlIqUa. Ut
-    EnIm Ad MiNiM vEnIaM, qUiS nOsTrUd ExErCiTaTiOn UlLaMcO lAbOrIs
-    NiSi Ut AlIqUiP eX eA cOmMoDo CoNsEqUaT. dUiS aUtE iRuRe DoLoR
-    iN rEpReHeNdErIt In VoLuPtAtE vElIt EsSe CiLlUm DoLoRe Eu FuGiAt
-    NuLlA pArIaTuR. eXcEpTeUr SiNt OcCaEcAt CuPiDaTaT nOn PrOiDeNt,
-    SuNt In CuLpA qUi OfFiCiA dEsErUnT mOlLiT aNiM iD eSt LaBoRuM.
+    EnIm Ad MiNiM vEnIaM, qUiS nOsTrUd ExErCiTaTiOn UlLamCo LaBoRiS
+    nIsI uT aLiQuIp Ex Ea CoMmOdO cOnSeQuAt. DuIs AutE iRuRe DoLoR
+    iN rEpReHeNdErIt In VoLuPtAtE vElIt EsSe CiLluM dOlOrE eU fUgIaT
+    nUlLa PaRiAtUr. ExCePtEuR sInT oCcAeCaT cUpIdAtAt NoN pRoIdEnT,
+    sUnT iN cUlPa QuI oFfIcIa DeSeRuNt MoLlIt AnIm Id EsT lAbOrUm.
     ";
 
     #[test]
