@@ -22,7 +22,7 @@ struct Cli {
     no_copy: bool,
 }
 
-fn main() -> anyhow::Result<()> {
+fn main() -> std::io::Result<()> {
     human_panic::setup_panic!();
     let args = Cli::parse();
 
@@ -42,7 +42,13 @@ fn main() -> anyhow::Result<()> {
             if len == 0 {
                 break; // end of file reached
             }
-            repr = std::str::from_utf8(&buf[0..len])?.to_string();
+            match std::str::from_utf8(&buf[0..len]) {
+                Ok(s) => repr = s.to_string(),
+                Err(e) => {
+                    eprintln!("The data provided via the stdin is not text, but this application only accepts text: {e}");
+                    std::process::exit(1)
+                }
+            }
             stream = if args.alternate {
                 spongebob::alternate(&repr)
             } else {
