@@ -1,3 +1,4 @@
+#[cfg(feature = "clipboard")]
 use arboard::Clipboard;
 use clap::Parser;
 
@@ -15,6 +16,7 @@ struct Cli {
     alternate: bool,
 
     /// Copy the modified text to the clipboard.
+    #[cfg(feature = "clipboard")]
     #[arg(short, long, default_value = "false")]
     no_copy: bool,
 }
@@ -31,6 +33,7 @@ fn main() {
 
     println!("{}", output);
 
+    #[cfg(feature = "clipboard")]
     if !args.no_copy {
         match Clipboard::new() {
             Ok(mut clipboard) => {
