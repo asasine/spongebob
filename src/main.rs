@@ -22,7 +22,7 @@ struct Cli {
     no_copy: bool,
 }
 
-fn main() -> std::io::Result<()> {
+fn main() {
     human_panic::setup_panic!();
     let args = Cli::parse();
 
@@ -38,7 +38,13 @@ fn main() -> std::io::Result<()> {
         let mut stream: String;
         output = String::new();
         loop {
-            let len = stdin.read(&mut buf)?;
+            let len = match stdin.read(&mut buf) {
+                Ok(l) => l,
+                Err(e) => {
+                    eprintln!("Could not read from stdin: {e}");
+                    std::process::exit(1)
+                }
+            };
             if len == 0 {
                 break; // end of file reached
             }
@@ -88,7 +94,6 @@ fn main() -> std::io::Result<()> {
             }
         }
     }
-    Ok(())
 }
 
 #[cfg(test)]
