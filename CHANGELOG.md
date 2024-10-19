@@ -6,6 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0](https://github.com/asasine/spongebob/compare/v1.2.1...v2.0.0) - 2024-10-19
+
+### Added
+
+- accept text from stdin ([#16](https://github.com/asasine/spongebob/pull/16)) by @PlexSheep
+- *(release-plz)* added contributors to changelog ([#24](https://github.com/asasine/spongebob/pull/24)) by @asasine
+- *(clipboard)* [**breaking**] removed clipboard support ([#23](https://github.com/asasine/spongebob/pull/23)) by @asasine
+
+### Fixed
+
+- *(release-plz)* removed extraneous newlines in changelog by @asasine
+
+### Other
+
+- Added CONTRIBUTING.md ([#19](https://github.com/asasine/spongebob/pull/19)) by @asasine
+
 ## [1.2.1](https://github.com/asasine/spongebob/compare/v1.2.0...v1.2.1) - 2024-09-26
 
 ### Fixed
