@@ -1,8 +1,6 @@
 # Spongebob
 A utility to convert text to spongebob case a.k.a tHe MoCkInG sPoNgEbOb MeMe.
 
-Cross-platform clipboard support for Windows, macOS, and Linux included.
-
 [![Crates.io Version](https://img.shields.io/crates/v/spongebob?logo=rust)](https://crates.io/crates/spongebob)
 [![Crates.io Documentation](https://docs.rs/spongebob/badge.svg)](https://docs.rs/spongebob)
 [![CI](https://img.shields.io/github/actions/workflow/status/asasine/spongebob/rust.yaml?branch=main&logo=github&label=CI)](https://github.com/asasine/spongebob/actions/workflows/rust.yaml?query=branch%3Amain)
@@ -10,7 +8,7 @@ Cross-platform clipboard support for Windows, macOS, and Linux included.
 
 
 # Examples
-The command randomizes the words by default and copies them to the clipboard:
+The command randomizes the words by default:
 ```bash
 spongebob hello world
 # heLlO WoRld
@@ -22,10 +20,13 @@ spongebob --alternate hello world
 # hElLo WoRlD
 ```
 
-You can disable the clipboard with `--no-copy`:
-```bash
-spongebob --no-copy hello world
-```
+You can copy to the clipboard with existing utilities:
+
+- Windows: `spongebob foo | clip`
+- macOS: `spongebob foo | pbcopy`
+- Linux (Wayland): `spongebob foo | wl-copy`
+- Linux (X11): `spongebob foo | xclip`
+- WSL: `spongebob foo | clip.exe`
 
 # Installation
 ```bash

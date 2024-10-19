@@ -1,6 +1,5 @@
 use std::io::Read;
 
-use arboard::Clipboard;
 use clap::Parser;
 
 #[derive(Parser)]
@@ -16,10 +15,6 @@ struct Cli {
     /// Alternate the case of each letter, rather than randomizing.
     #[arg(short, long)]
     alternate: bool,
-
-    /// Copy the modified text to the clipboard.
-    #[arg(short, long, default_value = "false")]
-    no_copy: bool,
 }
 
 fn main() {
@@ -73,32 +68,10 @@ fn main() {
         };
         println!("{}", output);
     }
-
-    if !args.no_copy {
-        match Clipboard::new() {
-            Ok(mut clipboard) => {
-                clipboard
-                    .set_text(output)
-                    .expect("Failed to copy to clipboard.");
-
-                eprintln!("Copied to clipboard.");
-            }
-            Err(e) => {
-                if cfg!(target_os = "linux") {
-                    let yellow = anstyle::AnsiColor::Yellow.on_default();
-                    eprintln!("\n{yellow}Looks like you're experiencing https://github.com/asasine/spongebob/issues/8. Clipboard support on Linux is currently unreliable. In the meantime, try piping to wl-copy from the wl-clipboard package or copying from your terminal above.{yellow:#}");
-                    eprintln!("\nIf you can, please add a 👍 or comment to https://github.com/asasine/spongebob/issues/8 so I can prioritize fixing this.\n");
-                }
-
-                panic!("Failed to access clipboard: {}", e)
-            }
-        }
-    }
 }
 
 #[cfg(test)]
 mod tests {
-    use arboard::Clipboard;
     use assert_cmd::Command;
 
     const LONG_TEST_TEXT: &str = r"
@@ -125,7 +98,6 @@ mod tests {
         Command::cargo_bin("spongebob")
             .unwrap()
             .arg("--alternate")
-            .arg("--no-copy")
             .arg("hello")
             .assert()
             .success()
@@ -137,7 +109,6 @@ mod tests {
         Command::cargo_bin("spongebob")
             .unwrap()
             .arg("--alternate")
-            .arg("--no-copy")
             .arg("Hello, world!")
             .assert()
             .success()
@@ -149,7 +120,6 @@ mod tests {
         Command::cargo_bin("spongebob")
             .unwrap()
             .arg("--alternate")
-            .arg("--no-copy")
             .arg("Hello,")
             .arg("world!")
             .assert()
@@ -157,50 +127,10 @@ mod tests {
             .stdout(predicates::str::contains("HeLlO, wOrLd!"));
     }
 
-    #[ignore = "Clipboard access is not reliable in CI"]
-    #[test]
-    fn test_copies_to_clipboard() {
-        let mut clipboard = Clipboard::new().unwrap();
-        clipboard.clear().unwrap();
-        assert!(clipboard.get_text().is_err());
-
-        Command::cargo_bin("spongebob")
-            .unwrap()
-            .arg("--alternate")
-            .arg("hello")
-            .assert()
-            .success()
-            .stdout(predicates::str::contains("clipboard"));
-
-        assert_eq!(clipboard.get_text().unwrap(), "hElLo");
-    }
-
-    #[ignore = "Clipboard access is not reliable in CI"]
-    #[test]
-    fn test_no_copy() {
-        let mut clipboard = Clipboard::new().unwrap();
-        clipboard.set_text("unimportant").unwrap();
-        clipboard.clear().unwrap();
-        assert!(clipboard.get_text().is_err(), "Clipboard should be empty");
-
-        Command::cargo_bin("spongebob")
-            .unwrap()
-            .arg("--no-copy")
-            .arg("hello")
-            .assert()
-            .success();
-
-        assert!(
-            clipboard.get_text().is_err(),
-            "Clipboard should still be empty"
-        );
-    }
-
     #[test]
     fn test_implicit_short_stdin() {
         Command::cargo_bin("spongebob")
             .unwrap()
-            .arg("--no-copy")
             .arg("--alternate")
             .write_stdin("This is a test")
             .assert()
@@ -212,7 +142,6 @@ mod tests {
     fn test_explicit_short_stdin() {
         Command::cargo_bin("spongebob")
             .unwrap()
-            .arg("--no-copy")
             .arg("--alternate")
             .arg("-")
             .write_stdin("This is a test")
@@ -225,7 +154,6 @@ mod tests {
     fn test_explicit_long_stdin() {
         Command::cargo_bin("spongebob")
             .unwrap()
-            .arg("--no-copy")
             .arg("--alternate")
             .arg("-")
             .write_stdin(LONG_TEST_TEXT)
@@ -238,7 +166,6 @@ mod tests {
     fn test_implicit_long_stdin() {
         Command::cargo_bin("spongebob")
             .unwrap()
-            .arg("--no-copy")
             .arg("--alternate")
             .write_stdin(LONG_TEST_TEXT)
             .assert()
