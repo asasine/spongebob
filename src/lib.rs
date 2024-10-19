@@ -75,11 +75,15 @@ pub fn randomize(text: &str) -> String {
 /// assert_eq!(spaceify("Hello, world!"), "H e l l o ,  w o r l d ! ");
 /// ```
 pub fn spaceify(text: &str) -> String {
-    text.chars().map(|c| if !c.is_whitespace() {
-        format!("{} ", c)
-    } else {
-        c.to_string()
-    }).collect()
+    text.chars()
+        .map(|c| {
+            if !c.is_whitespace() {
+                format!("{} ", c)
+            } else {
+                c.to_string()
+            }
+        })
+        .collect()
 }
 
 #[cfg(test)]
