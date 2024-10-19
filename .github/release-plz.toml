@@ -1,0 +1,25 @@
+[changelog]
+body = """
+
+## [{{ version | trim_start_matches(pat="v") }}]\
+    {%- if release_link -%}\
+        ({{ release_link }})\
+    {% endif %} \
+    - {{ timestamp | date(format="%Y-%m-%d") }}
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group | upper_first }}
+    {% for commit in commits %}
+        - {%- if commit.scope %} *({{commit.scope}})* {%- endif -%}\
+        {%- if commit.breaking %} [**breaking**] {%- endif %} \
+        {{ commit.message -}} \
+        {{- self::code_link(commit=commit) }}{{ self::username(commit=commit) }}
+    {% endfor -%}
+{% endfor %}
+
+{%- macro code_link(commit) -%}
+    {% if commit.remote.pr_number %} - #{{ commit.remote.pr_number }} {%- else %} - {{ commit.id }} {%- endif %}
+{%- endmacro %}
+{%- macro username(commit) -%}
+    {% if commit.remote.username %} by @{{ commit.remote.username }} {%- endif -%}
+{%- endmacro %}
+"""
