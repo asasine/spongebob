@@ -13,7 +13,7 @@ body = """
         {%- if commit.breaking %} [**breaking**] {%- endif %} \
         {{ commit.message -}} \
         {{- self::username(commit=commit) }}
-    {% endfor -%}
+    {%- endfor %}
 {% endfor %}
 
 {%- macro username(commit) -%}
