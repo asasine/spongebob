@@ -40,9 +40,11 @@ fn main() {
                     std::process::exit(1)
                 }
             };
+
             if len == 0 {
                 break; // end of file reached
             }
+
             match std::str::from_utf8(&buf[0..len]) {
                 Ok(s) => repr = s.to_string(),
                 Err(e) => {
@@ -50,11 +52,13 @@ fn main() {
                     std::process::exit(1)
                 }
             }
+
             stream = if args.alternate {
                 spongebob::alternate(&repr)
             } else {
                 spongebob::randomize(&repr)
             };
+
             print!("{}", stream);
             output += &stream;
             stream.clear();
@@ -66,6 +70,7 @@ fn main() {
         } else {
             spongebob::randomize(&words)
         };
+
         println!("{}", output);
     }
 }
@@ -83,6 +88,7 @@ mod tests {
     nulla pariatur. Excepteur sint occaecat cupidatat non proident,
     sunt in culpa qui officia deserunt mollit anim id est laborum.
     ";
+
     const LONG_TEST_TEXT_SPONGEBOB: &str = r"
     LoReM iPsUm DoLoR sIt AmEt, CoNsEcTeTuR aDiPiScInG eLiT, sEd Do
     EiUsMoD tEmPoR iNcIdIdUnT uT lAbOrE eT dOlOrE mAgNa AlIqUa. Ut
