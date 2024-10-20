@@ -5,7 +5,7 @@ use clap::Parser;
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
 struct Cli {
-    /// The space-separated words to modify.
+    /// The space-separated words to modify, or "-" to read from stdin.
     ///
     /// If no words were provided, the words may be given from stdin. Input from stdin can be
     /// explicity requested by passing "-" as the first and only word.
