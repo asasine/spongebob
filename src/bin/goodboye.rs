@@ -2,8 +2,7 @@
 use clap::Parser;
 
 #[derive(Parser)]
-#[command(version)]
-/// A utility to a d d  s p a c e s to your text.
+#[command(version, about = "A utility to a d d  s p a c e s to your text.")]
 struct Cli {
     /// The space-separated words to modify.
     ///
@@ -25,6 +24,12 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use assert_cmd::Command;
+
+    #[test]
+    fn verify_cli() {
+        use clap::CommandFactory;
+        super::Cli::command().debug_assert();
+    }
 
     #[test]
     fn test_alternate_flag() {

@@ -100,6 +100,12 @@ mod tests {
     ";
 
     #[test]
+    fn verify_cli() {
+        use clap::CommandFactory;
+        super::Cli::command().debug_assert();
+    }
+
+    #[test]
     fn test_alternate_flag() {
         Command::cargo_bin("spongebob")
             .unwrap()
