@@ -1,7 +1,9 @@
+
 use clap::Parser;
 
 #[derive(Parser)]
-#[command(version, about, long_about = None)]
+#[command(version)]
+/// A utility to a d d  s p a c e s to your text.
 struct Cli {
     /// The space-separated words to modify.
     ///
