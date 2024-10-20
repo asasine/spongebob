@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1](https://github.com/asasine/spongebob/compare/v2.0.0...v2.0.1) - 2024-10-20
+
+### Other
+
+- *(goodboye)* changed about text to something more useful ([#27](https://github.com/asasine/spongebob/pull/27)) by @asasine
+
 ## [2.0.0](https://github.com/asasine/spongebob/compare/v1.2.1...v2.0.0) - 2024-10-19
 
 ### Added
