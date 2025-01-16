@@ -2,7 +2,16 @@
 use clap::Parser;
 
 #[derive(Parser)]
-#[command(version, about = "A utility to a d d  s p a c e s to your text.")]
+#[command(
+    version,
+    about = "A utility to a d d  s p a c e s to your text.",
+    after_long_help = r#"You can copy to the clipboard with existing utilities:
+  - Windows: `spongebob foo | clip`
+  - macOS: `spongebob foo | pbcopy`
+  - Linux (Wayland): `spongebob foo | wl-copy`
+  - Linux (X11): `spongebob foo | xclip`
+  - WSL: `spongebob foo | clip.exe`"#,
+)]
 struct Cli {
     /// The space-separated words to modify.
     ///
