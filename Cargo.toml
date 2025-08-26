@@ -1,6 +1,6 @@
 [package]
 name = "spongebob"
-version = "2.0.1"
+version = "2.0.2"
 authors = ["Adam Sasine <adam.sasine@gmail.com>"]
 edition = "2021"
 description = "A utility to convert text to spongebob case a.k.a tHe MoCkInG sPoNgEbOb MeMe."
