@@ -1,0 +1,103 @@
+name: Release Binaries
+
+on:
+  release:
+    types: [published]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-and-upload:
+    name: Build and upload binaries
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            suffix: ""
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            suffix: ""
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            suffix: ""
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            suffix: .exe
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            suffix: ""
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            suffix: ""
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install cross-compilation tools
+        if: matrix.target == 'aarch64-unknown-linux-gnu'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-aarch64-linux-gnu
+
+      - name: Install musl tools
+        if: matrix.target == 'x86_64-unknown-linux-musl'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y musl-tools
+
+      - name: Configure cross-compilation
+        if: matrix.target == 'aarch64-unknown-linux-gnu'
+        run: |
+          echo 'CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc' >> $GITHUB_ENV
+
+      - name: Build binaries
+        run: cargo build --release --target ${{ matrix.target }}
+
+      - name: Create archive directory
+        run: mkdir -p artifacts
+
+      - name: Prepare binaries (Unix)
+        if: matrix.os != 'windows-latest'
+        run: |
+          cp target/${{ matrix.target }}/release/spongebob${{ matrix.suffix }} artifacts/
+          cp target/${{ matrix.target }}/release/goodboye${{ matrix.suffix }} artifacts/
+
+      - name: Prepare binaries (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          copy target\${{ matrix.target }}\release\spongebob${{ matrix.suffix }} artifacts\
+          copy target\${{ matrix.target }}\release\goodboye${{ matrix.suffix }} artifacts\
+
+      - name: Create tar.gz archive (Unix)
+        if: matrix.os != 'windows-latest'
+        run: |
+          cd artifacts
+          tar -czf ../spongebob-${{ github.ref_name }}-${{ matrix.target }}.tar.gz *
+
+      - name: Create zip archive (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          cd artifacts
+          7z a ../spongebob-${{ github.ref_name }}-${{ matrix.target }}.zip *
+
+      - name: Upload tar.gz to release (Unix)
+        if: matrix.os != 'windows-latest'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./spongebob-${{ github.ref_name }}-${{ matrix.target }}.tar.gz
+
+      - name: Upload zip to release (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./spongebob-${{ github.ref_name }}-${{ matrix.target }}.zip
