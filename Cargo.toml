@@ -11,7 +11,7 @@ categories = ["command-line-utilities", "text-processing"]
 
 [package.metadata.binstall]
 pkg-url = "{ repo }/releases/download/v{ version }/{ name }-v{ version }-{ target }.{ archive-format }"
-bin-dir = "{ bin }/{ bin-name }{ binary-ext }"
+bin-dir = "{ bin }{ binary-ext }"
 
 [dependencies]
 anstyle = "1.0.7"
