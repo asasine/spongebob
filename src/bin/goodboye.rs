@@ -1,4 +1,3 @@
-
 use clap::Parser;
 
 #[derive(Parser)]
@@ -10,7 +9,7 @@ use clap::Parser;
   - macOS: `spongebob foo | pbcopy`
   - Linux (Wayland): `spongebob foo | wl-copy`
   - Linux (X11): `spongebob foo | xclip`
-  - WSL: `spongebob foo | clip.exe`"#,
+  - WSL: `spongebob foo | clip.exe`"#
 )]
 struct Cli {
     /// The space-separated words to modify.
@@ -28,7 +27,6 @@ fn main() {
 
     println!("{}", output);
 }
-
 
 #[cfg(test)]
 mod tests {
