@@ -31,6 +31,7 @@ jobs:
           PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
           set -o pipefail
+          echo '{"extends":["@commitlint/config-conventional"]}' > .commitlintrc.json
           echo "$PR_TITLE" | npx commitlint 2>&1 | tee /tmp/commitlint-output.txt
 
       - name: Comment on failure
