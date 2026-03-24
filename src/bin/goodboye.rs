@@ -1,16 +1,10 @@
-
 use clap::Parser;
 
 #[derive(Parser)]
 #[command(
     version,
     about = "A utility to a d d  s p a c e s to your text.",
-    after_long_help = r#"You can copy to the clipboard with existing utilities:
-  - Windows: `spongebob foo | clip`
-  - macOS: `spongebob foo | pbcopy`
-  - Linux (Wayland): `spongebob foo | wl-copy`
-  - Linux (X11): `spongebob foo | xclip`
-  - WSL: `spongebob foo | clip.exe`"#,
+    after_long_help = spongebob::clipboard_help!("goodboye"),
 )]
 struct Cli {
     /// The space-separated words to modify.
@@ -29,45 +23,11 @@ fn main() {
     println!("{}", output);
 }
 
-
 #[cfg(test)]
 mod tests {
-    use assert_cmd::Command;
-
     #[test]
     fn verify_cli() {
         use clap::CommandFactory;
         super::Cli::command().debug_assert();
-    }
-
-    #[test]
-    fn test_alternate_flag() {
-        Command::cargo_bin("goodboye")
-            .unwrap()
-            .arg("hello")
-            .assert()
-            .success()
-            .stdout(predicates::str::contains("h e l l o "));
-    }
-
-    #[test]
-    fn test_multiple_words_one_string() {
-        Command::cargo_bin("goodboye")
-            .unwrap()
-            .arg("Hello,    world!") // multiple spaces to test that they are preserved
-            .assert()
-            .success()
-            .stdout(predicates::str::contains("H e l l o ,     w o r l d ! "));
-    }
-
-    #[test]
-    fn test_multiple_words_multiple_strings() {
-        Command::cargo_bin("goodboye")
-            .unwrap()
-            .arg("Hello,")
-            .arg("world!")
-            .assert()
-            .success()
-            .stdout(predicates::str::contains("H e l l o ,  w o r l d ! "));
     }
 }
