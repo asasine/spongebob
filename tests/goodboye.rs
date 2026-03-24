@@ -1,4 +1,5 @@
-use assert_cmd::Command;
+use assert_cmd::{assert::OutputAssertExt, cargo::CommandCargoExt};
+use std::process::Command;
 
 #[test]
 fn test_alternate_flag() {

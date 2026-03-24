@@ -1,4 +1,8 @@
-use assert_cmd::Command;
+use assert_cmd::{assert::OutputAssertExt, cargo::CommandCargoExt};
+use std::{
+    io::Write,
+    process::{Output, Stdio},
+};
 
 const LONG_TEST_TEXT: &str = r"
     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -20,9 +24,30 @@ const LONG_TEST_TEXT_SPONGEBOB: &str = r"
     sUnT iN cUlPa QuI oFfIcIa DeSeRuNt MoLlIt AnIm Id EsT lAbOrUm.
     ";
 
+/// Extension trait for [`Command`] to run a process with a given stdin.
+trait SpawnExt {
+    /// Spawn the process, write `input` to the stdin of the command, and return the output.
+    fn run_with_stdin(&mut self, input: &str) -> Output;
+}
+
+impl SpawnExt for std::process::Command {
+    fn run_with_stdin(&mut self, input: &str) -> Output {
+        self.stdin(Stdio::piped()).stdout(Stdio::piped());
+        let mut child = self.spawn().unwrap();
+        child
+            .stdin
+            .take()
+            .unwrap()
+            .write_all(input.as_bytes())
+            .unwrap();
+
+        child.wait_with_output().unwrap()
+    }
+}
+
 #[test]
 fn test_alternate_flag() {
-    Command::cargo_bin("spongebob")
+    std::process::Command::cargo_bin("spongebob")
         .unwrap()
         .arg("--alternate")
         .arg("hello")
@@ -33,7 +58,7 @@ fn test_alternate_flag() {
 
 #[test]
 fn test_multiple_words_one_string() {
-    Command::cargo_bin("spongebob")
+    std::process::Command::cargo_bin("spongebob")
         .unwrap()
         .arg("--alternate")
         .arg("Hello, world!")
@@ -44,7 +69,7 @@ fn test_multiple_words_one_string() {
 
 #[test]
 fn test_multiple_words_multiple_strings() {
-    Command::cargo_bin("spongebob")
+    std::process::Command::cargo_bin("spongebob")
         .unwrap()
         .arg("--alternate")
         .arg("Hello,")
@@ -56,10 +81,10 @@ fn test_multiple_words_multiple_strings() {
 
 #[test]
 fn test_implicit_short_stdin() {
-    Command::cargo_bin("spongebob")
+    std::process::Command::cargo_bin("spongebob")
         .unwrap()
         .arg("--alternate")
-        .write_stdin("This is a test")
+        .run_with_stdin("This is a test")
         .assert()
         .success()
         .stdout(predicates::str::contains("ThIs Is A tEsT"));
@@ -67,11 +92,11 @@ fn test_implicit_short_stdin() {
 
 #[test]
 fn test_explicit_short_stdin() {
-    Command::cargo_bin("spongebob")
+    std::process::Command::cargo_bin("spongebob")
         .unwrap()
         .arg("--alternate")
         .arg("-")
-        .write_stdin("This is a test")
+        .run_with_stdin("This is a test")
         .assert()
         .success()
         .stdout(predicates::str::contains("ThIs Is A tEsT"));
@@ -79,11 +104,11 @@ fn test_explicit_short_stdin() {
 
 #[test]
 fn test_explicit_long_stdin() {
-    Command::cargo_bin("spongebob")
+    std::process::Command::cargo_bin("spongebob")
         .unwrap()
         .arg("--alternate")
         .arg("-")
-        .write_stdin(LONG_TEST_TEXT)
+        .run_with_stdin(LONG_TEST_TEXT)
         .assert()
         .success()
         .stdout(predicates::str::contains(LONG_TEST_TEXT_SPONGEBOB));
@@ -91,10 +116,10 @@ fn test_explicit_long_stdin() {
 
 #[test]
 fn test_implicit_long_stdin() {
-    Command::cargo_bin("spongebob")
+    std::process::Command::cargo_bin("spongebob")
         .unwrap()
         .arg("--alternate")
-        .write_stdin(LONG_TEST_TEXT)
+        .run_with_stdin(LONG_TEST_TEXT)
         .assert()
         .success()
         .stdout(predicates::str::contains(LONG_TEST_TEXT_SPONGEBOB));
