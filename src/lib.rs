@@ -86,6 +86,34 @@ pub fn spaceify(text: &str) -> String {
         .collect()
 }
 
+/// Generate the OS-appropriate clipboard help text for a given command name.
+///
+/// This is an internal macro and is not part of the public API of this crate.
+#[doc(hidden)]
+#[macro_export]
+macro_rules! clipboard_help {
+    ($cmd:literal) => {
+        if cfg!(windows) {
+            concat!(
+                "You can copy to the clipboard with existing utilities:\n",
+                "  - `", $cmd, " foo | clip`"
+            )
+        } else if cfg!(target_os = "macos") {
+            concat!(
+                "You can copy to the clipboard with existing utilities:\n",
+                "  - `", $cmd, " foo | pbcopy`"
+            )
+        } else {
+            concat!(
+                "You can copy to the clipboard with existing utilities:\n",
+                "  - Wayland: `", $cmd, " foo | wl-copy`\n",
+                "  - X11: `", $cmd, " foo | xclip`\n",
+                "  - WSL: `", $cmd, " foo | clip.exe`"
+            )
+        }
+    };
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

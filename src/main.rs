@@ -7,12 +7,7 @@ use clap::Parser;
     version,
     about = "A utility to convert text to spongebob case a.k.a tHe MoCkInG sPoNgEbOb MeMe.",
     long_about = None,
-    after_long_help = r#"You can copy to the clipboard with existing utilities:
-  - Windows: `spongebob foo | clip`
-  - macOS: `spongebob foo | pbcopy`
-  - Linux (Wayland): `spongebob foo | wl-copy`
-  - Linux (X11): `spongebob foo | xclip`
-  - WSL: `spongebob foo | clip.exe`"#,
+    after_long_help = spongebob::clipboard_help!("spongebob"),
 )]
 struct Cli {
     /// The space-separated words to modify, or "-" to read from stdin.
