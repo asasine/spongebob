@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.2](https://github.com/asasine/spongebob/compare/v2.0.1...v2.0.2) - 2026-03-24
+
+### Other
+
+- add workflow to check for conventional commit PR titles ([#41](https://github.com/asasine/spongebob/pull/41)) by @Copilot
+- change assert_cmd tests to integration tests ([#39](https://github.com/asasine/spongebob/pull/39)) by @asasine
+- *(deps)* bump actions/checkout from 5 to 6 ([#36](https://github.com/asasine/spongebob/pull/36)) by @dependabot[bot]
+- *(deps)* bump actions/checkout from 4 to 5 ([#31](https://github.com/asasine/spongebob/pull/31)) by @dependabot[bot]
+
 ## [2.0.1](https://github.com/asasine/spongebob/compare/v2.0.0...v2.0.1) - 2025-01-16
 
 ### Other
