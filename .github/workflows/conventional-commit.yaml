@@ -29,7 +29,9 @@ jobs:
         id: commitlint
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
-        run: echo "$PR_TITLE" | npx commitlint 2>&1 | tee /tmp/commitlint-output.txt
+        run: |
+          set -o pipefail
+          echo "$PR_TITLE" | npx commitlint 2>&1 | tee /tmp/commitlint-output.txt
 
       - name: Comment on failure
         if: failure()
