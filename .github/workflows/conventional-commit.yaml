@@ -14,20 +14,30 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Check conventional commit format
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install commitlint
+        run: npm install --no-save @commitlint/cli@20 @commitlint/config-conventional@20
+
+      - name: Lint PR title
+        id: commitlint
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: echo "$PR_TITLE" | npx commitlint 2>&1 | tee /tmp/commitlint-output.txt
+
+      - name: Comment on failure
+        if: failure()
         uses: actions/github-script@v7
         with:
           script: |
-            const title = context.payload.pull_request.title;
-
-            // Conventional commit pattern: type(optional scope): description
-            // Types from conventionalcommits.org commonly used with release-plz
-            const pattern = /^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?!?: .+$/;
-
-            if (pattern.test(title)) {
-              console.log(`PR title "${title}" follows conventional commit format.`);
-              return;
-            }
+            const fs = require("fs");
+            const output = fs.readFileSync("/tmp/commitlint-output.txt", "utf8").trim();
 
             const body = [
               `**PR title does not follow [Conventional Commits](https://www.conventionalcommits.org/) format.**`,
@@ -39,7 +49,13 @@ jobs:
               `- \`fix(cli): corrected typo in help message\``,
               `- \`docs: updated README.md\``,
               ``,
-              `Supported types: \`feat\`, \`fix\`, \`docs\`, \`style\`, \`refactor\`, \`perf\`, \`test\`, \`build\`, \`ci\`, \`chore\`, \`revert\``,
+              `<details>`,
+              `<summary>commitlint output</summary>`,
+              ``,
+              "```",
+              output,
+              "```",
+              `</details>`,
             ].join("\n");
 
             // Find existing bot comment to update instead of creating duplicates
@@ -69,5 +85,3 @@ jobs:
                 body: body,
               });
             }
-
-            core.setFailed(`PR title "${title}" does not follow conventional commit format.`);
