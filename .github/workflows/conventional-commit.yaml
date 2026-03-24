@@ -32,7 +32,7 @@ jobs:
         run: |
           set -o pipefail
           echo '{"extends":["@commitlint/config-conventional"]}' > .commitlintrc.json
-          echo "$PR_TITLE" | npx commitlint 2>&1 | tee /tmp/commitlint-output.txt
+          echo "$PR_TITLE" | npx commitlint --color false 2>&1 | tee /tmp/commitlint-output.txt
 
       - name: Comment on failure
         if: failure()
