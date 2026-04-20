@@ -29,6 +29,13 @@ You can copy to the clipboard with existing utilities:
 - WSL: `spongebob foo | clip.exe`
 
 # Installation
+
+## Using cargo-binstall (recommended)
+```bash
+cargo binstall spongebob
+```
+
+## Using cargo install
 ```bash
 cargo install spongebob
 ```
