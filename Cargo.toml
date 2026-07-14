@@ -9,6 +9,10 @@ repository = "https://github.com/asasine/spongebob"
 license = "MIT"
 categories = ["command-line-utilities", "text-processing"]
 
+[package.metadata.binstall]
+pkg-url = "{ repo }/releases/download/v{ version }/{ name }-v{ version }-{ target }.{ archive-format }"
+bin-dir = "{ bin }{ binary-ext }"
+
 [dependencies]
 anstyle = "1.0.14"
 clap = { version = "4.6.0", features = ["derive", "unicode"] }
